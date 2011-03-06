@@ -113,3 +113,8 @@ Calls the callback on the next tick of the event loop. On Node.js this method
 simply delegates to +process.nextTick+. In the browser, +nextTick+ is emulated
 by passing the callback to +setTimeout(callback, 0)+
 
+[[license]]
+buster-util license
+-------------------
+
+include::../LICENSE[]
