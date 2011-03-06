@@ -1,2 +1,2 @@
 #!/bin/sh
-asciidoc -a stylesheet="`pwd`"/doc/buster.css doc/util.txt
+asciidoc -a stylesheet="`pwd`"/doc/buster.css doc/core.txt
