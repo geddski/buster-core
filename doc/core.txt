@@ -2,8 +2,6 @@ Buster core 0.2.0 documentation
 ===============================
 :Author: Christian Johansen
 :Email: christian@cjohansen.no
-:Author: August Lilleaas
-:Email: august.lilleaas@gmail.com
 
 A collection of utilities commonly used across Buster.JS projects.
 

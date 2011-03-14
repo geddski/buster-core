@@ -1,5 +1,21 @@
 {
     "name": "buster-core",
     "version": "0.2.0",
-    "main": "./lib/buster-core"
+    "description": "Buster core utilities"
+    "homepage": "http://busterjs.org/buster-core",
+    "author": {
+        "name": "August Lilleaas",
+        "email": "august.lilleaas@gmail.com",
+        "url": "http://augustl.com"
+    },
+    "contributors": [{
+        "name": "Christian Johansen",
+        "email": "christian@cjohansen.no",
+        "url": "http://cjohansen.no"
+    }],
+    "main": "./lib/buster-core",
+    "repository": {
+        "type": "git",
+        "url": "http://git.gitorious.org/buster-js/buster-core.git"
+    }
 }
