@@ -105,3 +105,10 @@ testCase("BusterKeysTest", {
     }
 });
 
+testCase("BusterCreateTest", {
+    "should create object inheriting from other object": function () {
+        var obj = {};
+
+        assert.ok(obj.isPrototypeOf(buster.create(obj)));
+    }
+});
