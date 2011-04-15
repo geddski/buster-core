@@ -112,3 +112,11 @@ testCase("BusterCreateTest", {
         assert.ok(obj.isPrototypeOf(buster.create(obj)));
     }
 });
+
+testCase("BusterRequireTest", {
+    "should extend buster with a buster module": function () {
+        buster.require("util");
+
+        assert.ok(typeof buster.testCase == "function");
+    }
+});
