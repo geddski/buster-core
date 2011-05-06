@@ -303,13 +303,13 @@ buster.util.testCase("EventEmitterBindTest", {
     },
 
     "should use function names for property names if present": function () {
-        var method = function myHandler() {};
+        function myHandler() {};
         var listener = {};
         var emitter = buster.create(buster.eventEmitter);
 
-        emitter.bind(listener, { "someEvent": method });
+        emitter.bind(listener, { "someEvent": myHandler });
 
-        assert.equal(listener.myHandler, method);
+        assert.equal(listener.myHandler, myHandler);
         assert.ok(emitter.hasListener("someEvent", listener.myHandler, listener));
     }
 });
