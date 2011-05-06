@@ -9,12 +9,6 @@ if (typeof require != "undefined") {
     });
 }
 
-if (typeof process == "object") {
-    process.on("uncaughtException", function (err) {
-        console.log("Uncaught error: " + err.message);
-    });
-}
-
 buster.util.testCase("EmitterCreateTest", {
     "should create event emitter": function () {
         var emitter = buster.eventEmitter.create();
