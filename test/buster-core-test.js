@@ -1,11 +1,11 @@
 if (typeof require != "undefined") {
-    var testCase = require("buster-util").testCase;
-    var assert = require("assert");
     var buster = require("../lib/buster-core");
+    buster.util = require("buster-util");
+    var assert = require("assert");
     var sinon = require("sinon");
 }
 
-testCase("BusterBindTest", {
+buster.util.testCase("BusterBindTest", {
     "should call function with bound this object": function () {
         var func = sinon.spy();
         var obj = {};
@@ -61,7 +61,7 @@ testCase("BusterBindTest", {
     }
 });
 
-testCase("BusterIsArgumentsTest", {
+buster.util.testCase("BusterIsArgumentsTest", {
     "should recognize real arguments object": function () {
         assert.ok(buster.isArguments(arguments));
     },
@@ -79,20 +79,11 @@ testCase("BusterIsArgumentsTest", {
     }
 });
 
-testCase("BusterCreateTest", {
-    "should create object that inherits from other object": function () {
-        var obj = { id: 42 };
-        var obj2 = buster.create(obj);
-
-        assert.ok(obj.isPrototypeOf(obj2));
-    }
-});
-
-testCase("BusterKeysTest", {
+buster.util.testCase("BusterKeysTest", {
     "should return keys of object": function () {
         var obj = { a: 1, b: 2, c: 3 };
 
-        assert.deepEqual(buster.keys(obj).sort(), ["a", "b", "c"]);
+        assert.equal(buster.keys(obj).sort().join(""), "abc");
     },
 
     "should exclude inherited properties": function () {
@@ -101,11 +92,11 @@ testCase("BusterKeysTest", {
         obj2.d = 4;
         obj2.e = 5;
 
-        assert.deepEqual(buster.keys(obj2).sort(), ["d", "e"]);
+        assert.deepEqual(buster.keys(obj2).sort().join(""), "de");
     }
 });
 
-testCase("BusterCreateTest", {
+buster.util.testCase("BusterCreateTest", {
     "should create object inheriting from other object": function () {
         var obj = {};
 
@@ -113,10 +104,12 @@ testCase("BusterCreateTest", {
     }
 });
 
-testCase("BusterRequireTest", {
-    "should extend buster with a buster module": function () {
-        buster.require("util");
+if (buster.require) {
+    buster.util.testCase("BusterRequireTest", {
+        "should extend buster with a buster module": function () {
+            buster.require("util");
 
-        assert.ok(typeof buster.testCase == "function");
-    }
-});
+            assert.ok(typeof buster.testCase == "function");
+        }
+    });
+}

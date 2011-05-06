@@ -1,8 +1,7 @@
 if (typeof require != "undefined") {
-    var testCase = require("buster-util").testCase;
     var sinon = require("sinon");
-
     var buster = require("../lib/buster-core");
+    buster.util = require("buster-util");
     var assert = require("assert");
 
     buster.extend(buster, {
@@ -10,11 +9,13 @@ if (typeof require != "undefined") {
     });
 }
 
-process.on("uncaughtException", function (err) {
-    console.log("Uncaught error: " + err.message);
-});
+if (typeof process == "object") {
+    process.on("uncaughtException", function (err) {
+        console.log("Uncaught error: " + err.message);
+    });
+}
 
-testCase("EmitterAddListenerTest", {
+buster.util.testCase("EmitterCreateTest", {
     "should create event emitter": function () {
         var emitter = buster.eventEmitter.create();
 
@@ -22,7 +23,7 @@ testCase("EmitterAddListenerTest", {
     }
 });
 
-testCase("EmitterAddListenerTest", {
+buster.util.testCase("EmitterAddListenerTest", {
     "should store functions": function () {
         var emitter = buster.create(buster.eventEmitter);
         var listeners = [sinon.spy(), sinon.spy()];
@@ -54,7 +55,7 @@ testCase("EmitterAddListenerTest", {
     }
 });
 
-testCase("EmitterHasListenerTest", {
+buster.util.testCase("EmitterHasListenerTest", {
     "should return false when no listeners": function () {
         var emitter = buster.create(buster.eventEmitter);
 
@@ -99,7 +100,7 @@ testCase("EmitterHasListenerTest", {
     }
 });
 
-testCase("EmitterEmitTest", {
+buster.util.testCase("EmitterEmitTest", {
     "should call all listeners": function () {
         var emitter = buster.create(buster.eventEmitter);
         var listeners = [sinon.spy(), sinon.spy()];
@@ -194,7 +195,7 @@ testCase("EmitterEmitTest", {
     }
 });
 
-testCase("EventEmitterBindTest", {
+buster.util.testCase("EventEmitterBindTest", {
     "should return object bound to": function () {
         var listener = { doIt: function () {} };
         var result = buster.create(buster.eventEmitter).bind(listener, "doIt");
@@ -319,7 +320,7 @@ testCase("EventEmitterBindTest", {
     }
 });
 
-testCase("EmitterRemoveListenerTest", {
+buster.util.testCase("EmitterRemoveListenerTest", {
     "should remove listener": function () {
         var listener = sinon.spy();
         var emitter = buster.create(buster.eventEmitter);
