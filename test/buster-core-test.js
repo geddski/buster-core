@@ -104,6 +104,20 @@ buster.util.testCase("BusterCreateTest", {
     }
 });
 
+buster.util.testCase("BusterFunctionNameTest", {
+    "should get name from function declaration": function () {
+        function myFunc() {}
+
+        assert.equal(buster.functionName(myFunc), "myFunc");
+    },
+
+    "should get name from named function expression": function () {
+        var myFunc = function myFuncExpr() {}
+
+        assert.equal(buster.functionName(myFunc), "myFuncExpr");
+    }
+});
+
 if (buster.require) {
     buster.util.testCase("BusterRequireTest", {
         "should extend buster with a buster module": function () {
