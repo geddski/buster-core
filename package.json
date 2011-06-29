@@ -13,6 +13,10 @@
         "email": "christian@cjohansen.no",
         "url": "http://cjohansen.no"
     }],
+    "devDependencies": {
+        "buster-util": "*",
+        "sinon": "~>1"
+    },
     "main": "./lib/buster-core",
     "repository": {
         "type": "git",
