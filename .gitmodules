@@ -4,3 +4,9 @@
 [submodule "node_modules/sinon"]
 	path = node_modules/sinon
 	url = http://github.com/cjohansen/Sinon.JS.git
+[submodule "vendor/buster-util"]
+	path = vendor/buster-util
+	url = git://gitorious.org/buster/buster-util.git
+[submodule "vendor/sinon"]
+	path = vendor/sinon
+	url = git://github.com/cjohansen/Sinon.JS.git
