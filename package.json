@@ -1,8 +1,8 @@
 {
     "name": "buster-core",
-    "version": "0.2.1",
+    "version": "0.3.0",
     "description": "Buster core utilities",
-    "homepage": "http://busterjs.org/buster-core",
+    "homepage": "http://busterjs.org/docs/buster-core",
     "author": {
         "name": "August Lilleaas",
         "email": "august.lilleaas@gmail.com",
@@ -14,8 +14,8 @@
         "url": "http://cjohansen.no"
     }],
     "devDependencies": {
-        "buster-util": "*",
-        "sinon": "~>1"
+        "buster-util": "0.3",
+        "sinon": "~>1.1"
     },
     "main": "./lib/buster-core",
     "repository": {
