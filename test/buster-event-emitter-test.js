@@ -144,7 +144,7 @@ buster.util.testCase("EmitterEmitTest", {
 
     "should emit all even when some fail": function () {
         var emitter = buster.create(buster.eventEmitter);
-        var listeners = [sinon.stub().throws(), sinon.spy()];
+        var listeners = [sinon.stub().throws("I'm thrown on purpose"), sinon.spy()];
 
         emitter.addListener("event", listeners[0]);
         emitter.addListener("event", listeners[1]);
