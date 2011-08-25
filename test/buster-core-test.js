@@ -61,41 +61,6 @@ buster.util.testCase("BusterBindTest", {
     }
 });
 
-buster.util.testCase("BusterIsArgumentsTest", {
-    "should recognize real arguments object": function () {
-        assert.ok(buster.isArguments(arguments));
-    },
-
-    "should reject primitive": function () {
-        assert.ok(!buster.isArguments(42));
-    },
-
-    "should reject object without length": function () {
-        assert.ok(!buster.isArguments({}));
-    },
-
-    "should reject array": function () {
-        assert.ok(!buster.isArguments([]));
-    }
-});
-
-buster.util.testCase("BusterKeysTest", {
-    "should return keys of object": function () {
-        var obj = { a: 1, b: 2, c: 3 };
-
-        assert.equal(buster.keys(obj).sort().join(""), "abc");
-    },
-
-    "should exclude inherited properties": function () {
-        var obj = { a: 1, b: 2, c: 3 };
-        var obj2 = buster.create(obj);
-        obj2.d = 4;
-        obj2.e = 5;
-
-        assert.deepEqual(buster.keys(obj2).sort().join(""), "de");
-    }
-});
-
 buster.util.testCase("BusterCreateTest", {
     "should create object inheriting from other object": function () {
         var obj = {};
@@ -117,13 +82,3 @@ buster.util.testCase("BusterFunctionNameTest", {
         assert.equal(buster.functionName(myFunc), "myFuncExpr");
     }
 });
-
-if (buster.require) {
-    buster.util.testCase("BusterRequireTest", {
-        "should extend buster with a buster module": function () {
-            buster.require("util");
-
-            assert.ok(typeof buster.testCase == "function");
-        }
-    });
-}
