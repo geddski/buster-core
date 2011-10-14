@@ -3,4 +3,4 @@
 	url = git://gitorious.org/buster/buster-util.git
 [submodule "vendor/sinon"]
 	path = vendor/sinon
-	url = git://github.com/cjohansen/Sinon.JS.git
+	url = https://github.com/cjohansen/Sinon.JS.git
