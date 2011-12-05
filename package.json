@@ -1,6 +1,6 @@
 {
     "name": "buster-core",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "description": "Buster core utilities",
     "homepage": "http://busterjs.org/docs/buster-core",
     "author": {
@@ -17,7 +17,7 @@
     }],
     "devDependencies": {
         "buster-util": "0.3",
-        "sinon": "~>1.1"
+        "sinon": "~1.2"
     },
     "main": "./lib/buster-core",
     "repository": {
