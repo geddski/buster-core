@@ -82,3 +82,95 @@ buster.util.testCase("BusterFunctionNameTest", {
         assert.equal(buster.functionName(myFunc), "myFuncExpr");
     }
 });
+
+buster.util.testCase("BusterParallelTest", {
+    setUp: function () {
+        this.fns = [sinon.stub(), sinon.stub(), sinon.stub()];
+    },
+
+    "should call all functions": function () {
+        buster.parallel(this.fns);
+
+        assert.ok(this.fns[0].calledOnce);
+        assert.ok(this.fns[1].calledOnce);
+        assert.ok(this.fns[2].calledOnce);
+    },
+
+    "should call callback immediately when no functions": function () {
+        var callback = sinon.spy();
+        buster.parallel([], callback);
+
+        assert.ok(callback.calledOnce);
+    },
+
+    "should do nothing when no functions and no callback": function () {
+        assert.doesNotThrow(function () {
+            buster.parallel([]);
+        });
+    },
+
+    "should not fail with no callback": function () {
+        assert.doesNotThrow(function () {
+            buster.parallel([sinon.stub().yields()]);
+        });
+    },
+
+    "should not call callback immediately": function () {
+        var callback = sinon.spy();
+        buster.parallel(this.fns, callback);
+
+        assert.ok(!callback.calledOnce);
+    },
+
+    "should call callback when single function completes": function () {
+        var callback = sinon.spy();
+        buster.parallel([sinon.stub().yields()], callback);
+
+        assert.ok(callback.calledOnce);
+    },
+
+    "should not call callback when first function completes": function () {
+        var callback = sinon.spy();
+        buster.parallel([sinon.spy(), sinon.stub().yields()], callback);
+
+        assert.ok(!callback.calledOnce);
+    },
+
+    "should call callback when all functions complete": function () {
+        var callback = sinon.spy();
+        buster.parallel([sinon.stub().yields(), sinon.stub().yields()], callback);
+
+        assert.ok(callback.calledOnce);
+    },
+
+    "should pass results to callback": function () {
+        var callback = sinon.spy();
+        buster.parallel([sinon.stub().yields(null, 2),
+                         sinon.stub().yields(null, 3)], callback);
+
+        assert.ok(callback.calledWith(null, [2, 3]));
+    },
+
+    "should immediately pass error to callback": function () {
+        var callback = sinon.spy();
+        buster.parallel([sinon.stub().yields({ message: "Ooops" }),
+                         sinon.stub().yields(null, 3)], callback);
+
+        assert.ok(callback.calledWith({ message: "Ooops" }));
+    },
+
+    "should only call callback once": function () {
+        var callback = sinon.spy();
+        buster.parallel([sinon.stub().yields({ message: "Ooops" }),
+                         sinon.stub().yields({ message: "Nooo!" })], callback);
+
+        assert.ok(callback.calledOnce);
+    },
+
+    "should only call callback once with one failing and one passing": function () {
+        var callback = sinon.spy();
+        buster.parallel([sinon.stub().yields(null), sinon.stub().yields({})], callback);
+
+        assert.ok(callback.calledOnce);
+    }
+});
