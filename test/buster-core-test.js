@@ -180,7 +180,7 @@ buster.util.testCase("BusterSeriesTest", {
         this.fns = [sinon.stub(), sinon.stub(), sinon.stub()];
     },
 
-    "should only call first function": function () {
+    "calls first function": function () {
         buster.series(this.fns);
 
         assert.ok(this.fns[0].calledOnce);
@@ -188,47 +188,55 @@ buster.util.testCase("BusterSeriesTest", {
         assert.ok(!this.fns[2].called);
     },
 
-    "should call callback immediately when no functions": function () {
+    "calls callback immediately when no functions": function () {
         var callback = sinon.spy();
         buster.series([], callback);
 
         assert.ok(callback.calledOnce);
     },
 
-    "should do nothing when no functions and no callback": function () {
+    "does nothing when no functions and no callback": function () {
         assert.doesNotThrow(function () {
             buster.series([]);
         });
     },
 
-    "should not fail with no callback": function () {
+    "does not fail with no callback": function () {
         assert.doesNotThrow(function () {
             buster.series([sinon.stub().yields()]);
         });
     },
 
-    "should not call callback immediately": function () {
+    "does not call callback immediately": function () {
         var callback = sinon.spy();
         buster.series(this.fns, callback);
 
         assert.ok(!callback.calledOnce);
     },
 
-    "should call callback when single function completes": function () {
+    "calls callback when single function completes": function () {
         var callback = sinon.spy();
         buster.series([sinon.stub().yields()], callback);
 
         assert.ok(callback.calledOnce);
     },
 
-    "should not call callback when first function completes": function () {
+    "calls callback when single promise resolves": function () {
+        var callback = sinon.spy();
+        var promise = { then: sinon.stub().yields() };
+        buster.series([sinon.stub().returns(promise)], callback);
+
+        assert.ok(callback.calledOnce);
+    },
+
+    "does not call callback when first function completes": function () {
         var callback = sinon.spy();
         buster.series([sinon.stub().yields(), sinon.spy()], callback);
 
         assert.ok(!callback.calledOnce);
     },
 
-    "should calls next function when first function completes": function () {
+    "calls next function when first function completes": function () {
         var callback = sinon.spy();
         var fns = [sinon.stub().yields(), sinon.spy()];
         buster.series(fns, callback);
@@ -236,14 +244,23 @@ buster.util.testCase("BusterSeriesTest", {
         assert.ok(fns[1].calledOnce);
     },
 
-    "should call callback when all functions complete": function () {
+    "calls next function when first promise resolves": function () {
+        var callback = sinon.spy();
+        var promise = { then: sinon.stub().yields() };
+        var fns = [sinon.stub().returns(promise), sinon.spy()];
+        buster.series(fns, callback);
+
+        assert.ok(fns[1].calledOnce);
+    },
+
+    "calls callback when all functions complete": function () {
         var callback = sinon.spy();
         buster.series([sinon.stub().yields(), sinon.stub().yields()], callback);
 
         assert.ok(callback.calledOnce);
     },
 
-    "should pass results to callback": function () {
+    "passes results to callback": function () {
         var callback = sinon.spy();
         buster.series([sinon.stub().yields(null, 2),
                        sinon.stub().yields(null, 3)], callback);
@@ -251,7 +268,7 @@ buster.util.testCase("BusterSeriesTest", {
         assert.ok(callback.calledWith(null, [2, 3]));
     },
 
-    "should immediately pass error to callback": function () {
+    "immediately passes error to callback": function () {
         var callback = sinon.spy();
         buster.series([sinon.stub().yields({ message: "Ooops" }),
                        sinon.stub().yields(null, 3)], callback);
@@ -259,7 +276,35 @@ buster.util.testCase("BusterSeriesTest", {
         assert.ok(callback.calledWith({ message: "Ooops" }));
     },
 
-    "should not call next when function errors": function () {
+    "immediately passes promise rejection to callback": function () {
+        var callback = sinon.spy();
+        var promise = { then: sinon.stub().callsArgWith(1, { message: "Ooops" }) };
+        buster.series([sinon.stub().returns(promise),
+                       sinon.stub().yields(null, 3)], callback);
+
+        assert.ok(callback.calledWith({ message: "Ooops" }));
+    },
+
+    "does not use promise resolution as error": function () {
+        var callback = sinon.spy();
+        var promise = { then: sinon.stub().yields({ id: 42 }) };
+        var second = sinon.spy();
+        buster.series([sinon.stub().returns(promise), second], callback);
+
+        assert.ok(second.calledOnce);
+    },
+
+    "collects results from promises and callbacks": function () {
+        var callback = sinon.spy();
+        var promise = { then: sinon.stub().yields({ id: 42 }) };
+
+        buster.series([sinon.stub().returns(promise),
+                       sinon.stub().yields(null, { id: 12 })], callback);
+
+        assert.ok(callback.calledWith(null, [{ id: 42 }, { id: 12 }]));
+    },
+
+    "does not call next when function errors": function () {
         var callback = sinon.spy();
         var fns = [sinon.stub().yields({ message: "Ooops" }),
                    sinon.stub().yields(null, 3)];
@@ -268,7 +313,7 @@ buster.util.testCase("BusterSeriesTest", {
         assert.ok(!fns[1].called);
     },
 
-    "should only call callback once": function () {
+    "only calls callback once": function () {
         var callback = sinon.spy();
         buster.series([sinon.stub().yields({ message: "Ooops" }),
                        sinon.stub().yields({ message: "Nooo!" })], callback);
@@ -276,14 +321,14 @@ buster.util.testCase("BusterSeriesTest", {
         assert.ok(callback.calledOnce);
     },
 
-    "should not fail if error and no callback": function () {
+    "does not fail if error and no callback": function () {
         assert.doesNotThrow(function () {
             buster.series([sinon.stub().yields({ message: "Ooops" }),
                            sinon.stub().yields({ message: "Nooo!" })]);
         });
     },
 
-    "should only call callback once with one failing and one passing": function () {
+    "only calls callback once with one failing and one passing": function () {
         var callback = sinon.spy();
         buster.series([sinon.stub().yields(null), sinon.stub().yields({})], callback);
 
