@@ -348,3 +348,46 @@ buster.util.testCase("EmitterRemoveListenerTest", {
         assert.ok(emitter.hasListener("event", listeners[2]));
     }
 });
+
+buster.util.testCase("EmitterOnceTest", {
+    "should only get called once": function () {
+        var listener = sinon.spy();
+        var emitter = buster.create(buster.eventEmitter);
+
+        emitter.once("event", listener);
+        emitter.emit("event");
+        assert.ok(listener.calledOnce);
+
+        emitter.emit("event");
+        assert.ok(listener.calledOnce);
+    },
+
+    "should get called with emitted arguments": function () {
+        var listener = sinon.spy();
+        var emitter = buster.create(buster.eventEmitter);
+        emitter.once("event", listener);
+        emitter.emit("event", "foo", 1);
+        assert.ok(listener.calledWithExactly("foo", 1));
+    },
+
+    "should get called with context": function () {
+        var emitter = buster.create(buster.eventEmitter);
+        var listener = function () { this.foo = "bar"; };
+        var obj = {};
+
+        emitter.addListener("event", listener, obj);
+        emitter.emit("event");
+        assert.equal("bar", obj.foo);
+    },
+
+    "should look up with hasListener": function () {
+        var listener = sinon.spy();
+        var emitter = buster.create(buster.eventEmitter);
+
+        emitter.once("event", listener);
+        assert.ok(emitter.hasListener("event", listener));
+
+        emitter.emit("event");
+        assert.ok(!emitter.hasListener("event", listener));
+    }
+});
