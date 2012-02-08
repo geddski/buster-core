@@ -16,8 +16,8 @@
         "url": "http://cjohansen.no"
     }],
     "devDependencies": {
-        "buster-util": "0.4",
-        "sinon": "~1.3"
+        "buster-util": "0.5",
+        "sinon": ">=1.3"
     },
     "main": "./lib/buster-core",
     "repository": {
