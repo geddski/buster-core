@@ -219,6 +219,33 @@
         }
     });
 
+    bu.testCase("BusterSomeTest", {
+        "should loop over all elements": function () {
+            var fn = sinon.spy();
+            B.some([1, 2, 3, 4], fn);
+
+            assert.equal(fn.callCount, 4);
+            assert.ok(fn.calledWith(1));
+            assert.ok(fn.calledWith(2));
+            assert.ok(fn.calledWith(3));
+            assert.ok(fn.calledWith(4));
+        },
+
+        "should return true if one call returns true": function () {
+            var fn = sinon.stub().returnsArg(0);
+            var result = B.some([false, false, true, false], fn);
+
+            assert.ok(result);
+        },
+
+        "should return false if no calls return true": function () {
+            var fn = sinon.stub().returns(false);
+            var result = B.some([1, 2, 3, 4], fn);
+
+            assert.ok(!result);
+        }
+    });
+
     bu.testCase("BusterParallelTest", {
         setUp: function () {
             this.fns = [sinon.stub(), sinon.stub(), sinon.stub()];
